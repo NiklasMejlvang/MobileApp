@@ -1,6 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/textTitleLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter title"
+        app:layout_constraintTop_toBottomOf="@id/textTitleLabel"
+        app:layout_constraintStart_toStartOf="@id/textTitleLabel"
+        app:layout_constraintEnd_toEndOf="@id/textTitleLabel"
+        android:inputType="textPersonName"/>
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/textDescriptionLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        app:layout_constraintTop_toBottomOf="@id/editTextTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter description"
+        app:layout_constraintTop_toBottomOf="@id/textDescriptionLabel"
+        app:layout_constraintStart_toStartOf="@id/textDescriptionLabel"
+        app:layout_constraintEnd_toEndOf="@id/textDescriptionLabel"
+        android:inputType="textMultiLine"/>
+
+    <!-- Priority -->
+    <TextView
+        android:id="@+id/textPriorityLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Priority"
+        app:layout_constraintTop_toBottomOf="@id/editTextDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextPriority"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter priority (number)"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/textPriorityLabel"
+        app:layout_constraintStart_toStartOf="@id/textPriorityLabel"
+        app:layout_constraintEnd_toEndOf="@id/textPriorityLabel"/>
+
+    <!-- Is Completed -->
+    <TextView
+        android:id="@+id/textCompletedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Completed"
+        app:layout_constraintTop_toBottomOf="@id/editTextPriority"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxCompleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/textCompletedLabel"
+        app:layout_constraintStart_toEndOf="@id/textCompletedLabel"
+        android:layout_marginStart="8dp"/>
+
+    <!-- Add Task Button -->
+    <Button
+        android:id="@+id/button_add_task"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Add Task"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
