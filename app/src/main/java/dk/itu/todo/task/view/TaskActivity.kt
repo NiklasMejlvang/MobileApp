@@ -6,9 +6,8 @@ import dk.itu.todo.R
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import dk.itu.todo.model.TaskDB
 
-    class TaskActivity : AppCompatActivity() {
+class TaskActivity : AppCompatActivity() {
 
         private lateinit var titleEt: EditText
         private lateinit var descEt: EditText

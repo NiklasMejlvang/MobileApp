@@ -1,0 +1,17 @@
+package dk.itu.todo.model.database
+
+import android.database.Cursor
+import android.database.CursorWrapper
+import dk.itu.todo.model.Task
+import dk.itu.todo.model.database.TasksDbSchema.TaskTable
+
+class TaskCursorWrapper(cursor: Cursor?) : CursorWrapper(cursor) {
+    val task: Task
+        get() {
+            val title = getString(getColumnIndex(TaskTable.Cols.TITLE))
+            val description = getString(getColumnIndex(TaskTable.Cols.DESCRIPTION))
+            val priority = getInt(getColumnIndex(TaskTable.Cols.PRIORITY))
+            val isCompleted = getInt(getColumnIndex(TaskTable.Cols.IS_COMPLETED)) != 0
+            return Task(title, description, priority, isCompleted)
+        }
+}
