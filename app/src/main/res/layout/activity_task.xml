@@ -1,99 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/etTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter title"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintStart_toStartOf="@id/tvTitle"
-        app:layout_constraintEnd_toEndOf="@id/tvTitle"
-        android:inputType="textPersonName"/>
+        <EditText
+            android:id="@+id/etTitle"
+            android:hint="Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <!-- Description -->
-    <TextView
-        android:id="@+id/tvDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        app:layout_constraintTop_toBottomOf="@id/etTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        <EditText
+            android:id="@+id/etDescription"
+            android:hint="Description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/etDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter description"
-        app:layout_constraintTop_toBottomOf="@id/tvDescription"
-        app:layout_constraintStart_toStartOf="@id/tvDescription"
-        app:layout_constraintEnd_toEndOf="@id/tvDescription"
-        android:inputType="textMultiLine"/>
+        <EditText
+            android:id="@+id/etPriority"
+            android:hint="Priority (number)"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <!-- Priority -->
-    <TextView
-        android:id="@+id/tvPriority"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Priority"
-        app:layout_constraintTop_toBottomOf="@id/etDescription"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        <CheckBox
+            android:id="@+id/cbCompleted"
+            android:text="Completed?"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/etPriority"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter priority (number)"
-        android:inputType="number"
-        app:layout_constraintTop_toBottomOf="@id/tvPriority"
-        app:layout_constraintStart_toStartOf="@id/tvPriority"
-        app:layout_constraintEnd_toEndOf="@id/tvPriority"/>
+        <ImageView
+            android:id="@+id/imageViewTask"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Task Image"
+            android:layout_marginTop="16dp" />
 
-    <!-- Is Completed -->
-    <TextView
-        android:id="@+id/tvCompleted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Completed"
-        app:layout_constraintTop_toBottomOf="@id/etPriority"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"/>
+        <Button
+            android:id="@+id/button_take_picture"
+            android:text="Take Picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
 
-    <CheckBox
-        android:id="@+id/cbCompleted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvCompleted"
-        app:layout_constraintStart_toEndOf="@id/tvCompleted"
-        android:layout_marginStart="8dp"/>
+        <Button
+            android:id="@+id/button_add_task"
+            android:text="Save Task"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp" />
 
-    <!-- Add Task Button -->
-    <Button
-        android:id="@+id/button_add_task"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Add Task"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</ScrollView>

@@ -11,8 +11,7 @@ import dk.itu.todo.R
 import dk.itu.todo.task.view.TaskActivity
 import dk.itu.todo.taskList.viewmodel.TaskListViewModel
 
-class TaskListActivity : AppCompatActivity () {
-
+class TaskListActivity : AppCompatActivity() {
     private lateinit var rvTaskList: RecyclerView
     private lateinit var taskAdapter: TaskAdapter
     private lateinit var viewModel: TaskListViewModel
@@ -21,27 +20,18 @@ class TaskListActivity : AppCompatActivity () {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
 
-        rvTaskList = findViewById(R.id.rv_task_list)
+        rvTaskList  = findViewById(R.id.rv_task_list)
         taskAdapter = TaskAdapter(mutableListOf())
-
-        taskAdapter.onDeleteClick = { task ->
-            viewModel.deleteTask(task.title)
-            taskAdapter.deleteTask(task)
-        }
-
-        rvTaskList.adapter = taskAdapter
+        rvTaskList.adapter       = taskAdapter
         rvTaskList.layoutManager = LinearLayoutManager(this)
 
         viewModel = ViewModelProvider(this)[TaskListViewModel::class.java]
-
         viewModel.tasks.observe(this) { tasks ->
             taskAdapter.setTasks(tasks)
         }
 
-        val buttonAddTask = findViewById<Button>(R.id.button_add_task)
-        buttonAddTask.setOnClickListener {
-            val intent = Intent(this, TaskActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.button_add_task).setOnClickListener {
+            startActivity(Intent(this, TaskActivity::class.java))
         }
     }
 

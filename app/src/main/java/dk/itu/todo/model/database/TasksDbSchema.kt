@@ -5,10 +5,11 @@ class TasksDbSchema {
         const val NAME = "Tasks"
 
         object Cols {
-            const val TITLE = "title"
-            const val DESCRIPTION = "description"
-            const val PRIORITY = "priority"
+            const val TITLE        = "title"
+            const val DESCRIPTION  = "description"
+            const val PRIORITY     = "priority"
             const val IS_COMPLETED = "isCompleted"
+            const val IMAGE_PATH   = "imagePath"
         }
     }
 }

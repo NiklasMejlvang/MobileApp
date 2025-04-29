@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- enable camera use -->
+    <!-- Allow use of device camera -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -16,7 +16,10 @@
         android:theme="@style/Theme.Todo"
         tools:targetApi="31">
 
+        <!-- Add-task screen -->
         <activity android:name=".task.view.TaskActivity" />
+
+        <!-- Task-list screen (launcher) -->
         <activity android:name=".taskList.view.TaskListActivity"
             android:exported="true">
             <intent-filter>
@@ -25,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <!-- FileProvider so the camera app can write to our private storage -->
+        <!-- FileProvider so camera can write into our external-files directory -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
