@@ -6,7 +6,7 @@ import dk.itu.todo.model.Task
 import android.view.LayoutInflater
 import dk.itu.todo.databinding.ItemTaskBinding
 
-class TaskAdapter(private var tasks: List<Task>) : RecyclerView.Adapter<TaskAdapter.TaskListViewHolder>() {
+class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<TaskAdapter.TaskListViewHolder>() {
     inner class TaskListViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListViewHolder {
@@ -26,5 +26,11 @@ class TaskAdapter(private var tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
 
     override fun getItemCount(): Int {
         return tasks.size
+    }
+
+    fun setTasks(newTasks: List<Task>) {
+        tasks.clear()
+        tasks.addAll(newTasks)
+        notifyDataSetChanged()
     }
 }

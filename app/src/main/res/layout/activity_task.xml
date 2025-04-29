@@ -8,7 +8,7 @@
 
     <!-- Title -->
     <TextView
-        android:id="@+id/textTitleLabel"
+        android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Title"
@@ -17,73 +17,73 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
-        android:id="@+id/editTextTitle"
+        android:id="@+id/etTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Enter title"
-        app:layout_constraintTop_toBottomOf="@id/textTitleLabel"
-        app:layout_constraintStart_toStartOf="@id/textTitleLabel"
-        app:layout_constraintEnd_toEndOf="@id/textTitleLabel"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="@id/tvTitle"
         android:inputType="textPersonName"/>
 
     <!-- Description -->
     <TextView
-        android:id="@+id/textDescriptionLabel"
+        android:id="@+id/tvDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Description"
-        app:layout_constraintTop_toBottomOf="@id/editTextTitle"
+        app:layout_constraintTop_toBottomOf="@id/etTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
 
     <EditText
-        android:id="@+id/editTextDescription"
+        android:id="@+id/etDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Enter description"
-        app:layout_constraintTop_toBottomOf="@id/textDescriptionLabel"
-        app:layout_constraintStart_toStartOf="@id/textDescriptionLabel"
-        app:layout_constraintEnd_toEndOf="@id/textDescriptionLabel"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription"
+        app:layout_constraintStart_toStartOf="@id/tvDescription"
+        app:layout_constraintEnd_toEndOf="@id/tvDescription"
         android:inputType="textMultiLine"/>
 
     <!-- Priority -->
     <TextView
-        android:id="@+id/textPriorityLabel"
+        android:id="@+id/tvPriority"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Priority"
-        app:layout_constraintTop_toBottomOf="@id/editTextDescription"
+        app:layout_constraintTop_toBottomOf="@id/etDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
 
     <EditText
-        android:id="@+id/editTextPriority"
+        android:id="@+id/etPriority"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Enter priority (number)"
         android:inputType="number"
-        app:layout_constraintTop_toBottomOf="@id/textPriorityLabel"
-        app:layout_constraintStart_toStartOf="@id/textPriorityLabel"
-        app:layout_constraintEnd_toEndOf="@id/textPriorityLabel"/>
+        app:layout_constraintTop_toBottomOf="@id/tvPriority"
+        app:layout_constraintStart_toStartOf="@id/tvPriority"
+        app:layout_constraintEnd_toEndOf="@id/tvPriority"/>
 
     <!-- Is Completed -->
     <TextView
-        android:id="@+id/textCompletedLabel"
+        android:id="@+id/tvCompleted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Completed"
-        app:layout_constraintTop_toBottomOf="@id/editTextPriority"
+        app:layout_constraintTop_toBottomOf="@id/etPriority"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"/>
 
     <CheckBox
-        android:id="@+id/checkBoxCompleted"
+        android:id="@+id/cbCompleted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@id/textCompletedLabel"
-        app:layout_constraintStart_toEndOf="@id/textCompletedLabel"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvCompleted"
+        app:layout_constraintStart_toEndOf="@id/tvCompleted"
         android:layout_marginStart="8dp"/>
 
     <!-- Add Task Button -->

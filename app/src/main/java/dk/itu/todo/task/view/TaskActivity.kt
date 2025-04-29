@@ -6,6 +6,8 @@ import dk.itu.todo.R
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import dk.itu.todo.model.Task
+import dk.itu.todo.model.TaskRepository
 
 class TaskActivity : AppCompatActivity() {
 
@@ -14,36 +16,28 @@ class TaskActivity : AppCompatActivity() {
         private lateinit var prioEt: EditText
         private lateinit var doneCb: CheckBox
         private lateinit var addBtn: Button
-        private lateinit var dbHelper: TaskDB
+        private lateinit var repository: TaskRepository
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_task)
 
-            // 1) bind views
-            titleEt = findViewById(R.id.editTextTitle)
-            descEt  = findViewById(R.id.editTextDescription)
-            prioEt  = findViewById(R.id.editTextPriority)
-            doneCb  = findViewById(R.id.checkBoxCompleted)
+            titleEt = findViewById(R.id.etTitle)
+            descEt  = findViewById(R.id.etDescription)
+            prioEt  = findViewById(R.id.etPriority)
+            doneCb  = findViewById(R.id.cbCompleted)
             addBtn  = findViewById(R.id.button_add_task)
 
-            // 2) init DB helper
-            dbHelper = TaskDB(this)
+            repository = TaskRepository(this)
 
-            // 3) insert on click
             addBtn.setOnClickListener {
-                val title = titleEt.text.toString().trim()
-                val desc  = descEt.text.toString().trim()
-                val prio  = prioEt.text.toString().toIntOrNull() ?: 0
-                val done  = if (doneCb.isChecked) 1 else 0
-
-                val db = dbHelper.writableDatabase
-                db.execSQL(
-                    "INSERT INTO Tasks (Title, Description, Priority, IsCompleted) VALUES (?,?,?,?)",
-                    arrayOf(title, desc, prio, done)
+                val task = Task(
+                    title = titleEt.text.toString().trim(),
+                    description = descEt.text.toString().trim(),
+                    priority = prioEt.text.toString().toIntOrNull() ?: 0,
+                    isCompleted = doneCb.isChecked
                 )
-
-                // close this screen
+                repository.addTask(task)
                 finish()
             }
         }
