@@ -23,6 +23,12 @@ class TaskListActivity : AppCompatActivity () {
 
         rvTaskList = findViewById(R.id.rv_task_list)
         taskAdapter = TaskAdapter(mutableListOf())
+
+        taskAdapter.onDeleteClick = { task ->
+            viewModel.deleteTask(task.title)
+            taskAdapter.deleteTask(task)
+        }
+
         rvTaskList.adapter = taskAdapter
         rvTaskList.layoutManager = LinearLayoutManager(this)
 

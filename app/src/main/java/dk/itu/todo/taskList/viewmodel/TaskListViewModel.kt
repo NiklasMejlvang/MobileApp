@@ -14,7 +14,7 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
     val tasks: LiveData<List<Task>> get() = _tasks
 
     fun loadTasks() {
-        _tasks.value = repository.getAllTasks()  // runs on main thread, fine for small apps
+        _tasks.value = repository.getAllTasks()
     }
 
     fun deleteTask(title: String) {
