@@ -38,10 +38,10 @@ class TaskActivity : AppCompatActivity() {
         setContentView(R.layout.activity_task)
 
         // Bind views
-        titleEt    = findViewById(R.id.editTextTitle)
-        descEt     = findViewById(R.id.editTextDescription)
-        prioEt     = findViewById(R.id.editTextPriority)
-        doneCb     = findViewById(R.id.checkBoxCompleted)
+        titleEt    = findViewById(R.id.etTitle)
+        descEt     = findViewById(R.id.etDescription)
+        prioEt     = findViewById(R.id.etPriority)
+        doneCb     = findViewById(R.id.cbCompleted)
         imageView  = findViewById(R.id.imageViewTask)
         takePicBtn = findViewById(R.id.button_take_picture)
         addBtn     = findViewById(R.id.button_add_task)
