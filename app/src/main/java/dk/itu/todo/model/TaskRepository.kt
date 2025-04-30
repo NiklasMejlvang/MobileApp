@@ -10,8 +10,12 @@ class TaskRepository(context: Context) {
 
     fun getAllTasks(): List<Task> {
         val db     = dbHelper.readableDatabase
-        val cursor = db.query(TaskTable.NAME, null, null, null, null, null, null)
-        val list   = mutableListOf<Task>()
+        val cursor = db.query(
+            TaskTable.NAME,
+            null, null, null,
+            null, null, null
+        )
+        val list = mutableListOf<Task>()
         while (cursor.moveToNext()) {
             list += Task(
                 title       = cursor.getString(cursor.getColumnIndexOrThrow(TaskTable.Cols.TITLE)),
@@ -39,8 +43,10 @@ class TaskRepository(context: Context) {
 
     fun deleteTask(title: String) {
         val db = dbHelper.writableDatabase
-        db.delete(TaskTable.NAME,
+        db.delete(
+            TaskTable.NAME,
             "${TaskTable.Cols.TITLE} = ?",
-            arrayOf(title))
+            arrayOf(title)
+        )
     }
 }

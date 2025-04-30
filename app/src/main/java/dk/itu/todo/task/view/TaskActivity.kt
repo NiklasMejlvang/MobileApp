@@ -12,9 +12,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import android.widget.*
-import androidx.lifecycle.ViewModelProvider
 import dk.itu.todo.R
-import dk.itu.todo.task.viewmodel.TaskViewModel
+import dk.itu.todo.model.TaskDB
 import java.io.File
 
 class TaskActivity : AppCompatActivity() {
@@ -23,13 +22,14 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var prioEt: EditText
     private lateinit var doneCb: CheckBox
     private lateinit var addBtn: Button
+    private lateinit var takePicBtn: Button
     private lateinit var imageView: ImageView
-    private lateinit var takePictureBtn: Button
-    private lateinit var viewModel: TaskViewModel
+
     private var imagePath: String? = null
+    private lateinit var dbHelper: TaskDB
 
     companion object {
-        private const val REQUEST_IMAGE_CAPTURE   = 1
+        private const val REQUEST_IMAGE_CAPTURE     = 1
         private const val REQUEST_CAMERA_PERMISSION = 100
     }
 
@@ -38,21 +38,19 @@ class TaskActivity : AppCompatActivity() {
         setContentView(R.layout.activity_task)
 
         // Bind views
-        titleEt        = findViewById(R.id.etTitle)
-        descEt         = findViewById(R.id.etDescription)
-        prioEt         = findViewById(R.id.etPriority)
-        doneCb         = findViewById(R.id.cbCompleted)
-        imageView      = findViewById(R.id.imageViewTask)
-        takePictureBtn = findViewById(R.id.button_take_picture)
-        addBtn         = findViewById(R.id.button_add_task)
+        titleEt    = findViewById(R.id.editTextTitle)
+        descEt     = findViewById(R.id.editTextDescription)
+        prioEt     = findViewById(R.id.editTextPriority)
+        doneCb     = findViewById(R.id.checkBoxCompleted)
+        imageView  = findViewById(R.id.imageViewTask)
+        takePicBtn = findViewById(R.id.button_take_picture)
+        addBtn     = findViewById(R.id.button_add_task)
 
-        viewModel = ViewModelProvider(this)[TaskViewModel::class.java]
+        dbHelper = TaskDB(this)
 
-        takePictureBtn.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this, Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
+        takePicBtn.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.CAMERA),
@@ -64,12 +62,15 @@ class TaskActivity : AppCompatActivity() {
         }
 
         addBtn.setOnClickListener {
-            viewModel.addTask(
-                titleEt.text.toString().trim(),
-                descEt.text.toString().trim(),
-                prioEt.text.toString().toIntOrNull() ?: 0,
-                doneCb.isChecked,
-                imagePath
+            val title = titleEt.text.toString().trim()
+            val desc  = descEt.text.toString().trim()
+            val prio  = prioEt.text.toString().toIntOrNull() ?: 0
+            val done  = if (doneCb.isChecked) 1 else 0
+
+            val db = dbHelper.writableDatabase
+            db.execSQL(
+                "INSERT INTO Tasks (Title, Description, Priority, IsCompleted, ImagePath) VALUES (?,?,?,?,?)",
+                arrayOf(title, desc, prio, done, imagePath)
             )
             finish()
         }
@@ -81,11 +82,10 @@ class TaskActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CAMERA_PERMISSION &&
             grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
+            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             dispatchTakePictureIntent()
         } else {
-            Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Camera permission required", Toast.LENGTH_SHORT).show()
         }
     }
 
