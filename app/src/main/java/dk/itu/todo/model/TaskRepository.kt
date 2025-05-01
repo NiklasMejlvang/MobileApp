@@ -47,7 +47,8 @@ class TaskRepository(context: Context) {
                     "${TaskTable.Cols.PRIORITY}, " +
                     "${TaskTable.Cols.IS_COMPLETED}, " +
                     "${TaskTable.Cols.IMAGE_PATH}, " +
-                    "${TaskTable.Cols.LOCATION}," +
+                    "${TaskTable.Cols.LOCATION}" +
+                    ") VALUES (?, ?, ?, ?, ?, ?)",
             arrayOf(task.title, task.description, task.priority, if (task.isCompleted) 1 else 0, task.imagePath, task.location)
         )
 
