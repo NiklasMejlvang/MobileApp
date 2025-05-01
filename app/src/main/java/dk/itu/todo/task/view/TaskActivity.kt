@@ -1,13 +1,12 @@
 package dk.itu.todo.task.view
 
 import android.Manifest
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,17 +32,19 @@ class TaskActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: TaskDB
     private var imagePath: String? = null
+    private var photoUri: Uri? = null
+
+    private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
 
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 100
-        private const val REQUEST_IMAGE_CAPTURE    = 101
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
-        // 1) bind all views
+        // 1) Bind views
         titleEt    = findViewById(R.id.etTitle)
         descEt     = findViewById(R.id.etDescription)
         prioEt     = findViewById(R.id.etPriority)
@@ -52,15 +53,27 @@ class TaskActivity : AppCompatActivity() {
         addBtn     = findViewById(R.id.button_add_task)
         imageView  = findViewById(R.id.imageViewTask)
 
-        // 2) init DB helper
+        // 2) Init DB helper
         dbHelper = TaskDB(this)
 
-        // 3) camera‐button listener
-        takePicBtn.setOnClickListener {
-            // debug toast to confirm click
-            Toast.makeText(this, "Take picture clicked", Toast.LENGTH_SHORT).show()
+        // 3) Register the camera launcher
+        takePictureLauncher = registerForActivityResult(
+            ActivityResultContracts.TakePicture()
+        ) { success ->
+            if (success) {
+                // ==== Key change: Elvis operator here ====
+                val uri = photoUri
+                    ?: return@registerForActivityResult Toast
+                        .makeText(this, "No photo URI!", Toast.LENGTH_SHORT)
+                        .show()
+                imageView.setImageURI(uri)
+            } else {
+                Toast.makeText(this, "Picture not taken", Toast.LENGTH_SHORT).show()
+            }
+        }
 
-            // check runtime permission
+        // 4) “Take Picture” button logic
+        takePicBtn.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     this, Manifest.permission.CAMERA
                 ) != PackageManager.PERMISSION_GRANTED
@@ -75,73 +88,52 @@ class TaskActivity : AppCompatActivity() {
             }
         }
 
-        // 4) save‐task button
+        // 5) “Save Task” button logic
         addBtn.setOnClickListener {
             val title = titleEt.text.toString().trim()
             val desc  = descEt.text.toString().trim()
             val prio  = prioEt.text.toString().toIntOrNull() ?: 0
             val done  = if (doneCb.isChecked) 1 else 0
 
-            // insert into SQLite
-            val db = dbHelper.writableDatabase
-            db.execSQL(
+            dbHelper.writableDatabase.execSQL(
                 "INSERT INTO Tasks (Title, Description, Priority, IsCompleted, ImagePath) VALUES (?,?,?,?,?)",
                 arrayOf(title, desc, prio, done, imagePath)
             )
-
-            finish()  // back to list
+            finish()
         }
     }
 
-    // handle user’s response to the permission prompt
+    // handle camera-permission result
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent()
-            } else {
-                Toast.makeText(
-                    this,
-                    "Camera permission is required to take pictures",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        if (requestCode == REQUEST_CAMERA_PERMISSION &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
+            dispatchTakePictureIntent()
+        } else {
+            Toast.makeText(
+                this,
+                "Camera permission is required to take pictures",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
-    // launch the camera app, saving to our own file
+    // create the file + URI and launch the new API
     private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
-            intent.resolveActivity(packageManager)?.let {
-                val photoFile = createImageFile()
-                val photoUri  = FileProvider.getUriForFile(
-                    this,
-                    "$packageName.fileprovider",
-                    photoFile
-                )
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-            }
-        }
-    }
-
-    // create a temp JPEG file in app-specific pictures dir
-    private fun createImageFile(): File {
         val fileName   = "IMG_${System.currentTimeMillis()}"
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            ?: filesDir
-        return File.createTempFile(fileName, ".jpg", storageDir).apply {
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: filesDir
+        val photoFile  = File.createTempFile(fileName, ".jpg", storageDir).apply {
             imagePath = absolutePath
         }
-    }
-
-    // receive the camera’s result
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            imageView.setImageURI(Uri.fromFile(File(imagePath!!)))
-        }
+        photoUri = FileProvider.getUriForFile(
+            this,
+            "$packageName.fileprovider",
+            photoFile
+        )
+        takePictureLauncher.launch(photoUri!!)
     }
 }
