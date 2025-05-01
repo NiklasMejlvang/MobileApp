@@ -13,11 +13,14 @@ class DBCreate(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, nul
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
-            "create table " + TaskTable.NAME + "(" +
-                    TaskTable.Cols.TITLE + " text not null, " +
-                    TaskTable.Cols.DESCRIPTION + " text not null, " +
-                    TaskTable.Cols.PRIORITY + " integer not null, " +
-                    TaskTable.Cols.IS_COMPLETED + " integer not null);"
+            "CREATE TABLE " + TaskTable.NAME + "(" +
+                    TaskTable.Cols.TITLE + " TEXT NOT NULL, " +
+                    TaskTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
+                    TaskTable.Cols.PRIORITY + " INTEGER NOT NULL, " +
+                    TaskTable.Cols.IS_COMPLETED + " INTEGER NOT NULL, " +
+                    TaskTable.Cols.IMAGE_PATH + " TEXT" +
+                    TaskTable.Cols.LOCATION + " TEXT" +
+                    ");"
         )
     }
 
