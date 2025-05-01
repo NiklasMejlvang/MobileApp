@@ -9,6 +9,8 @@ class TasksDbSchema {
             const val DESCRIPTION = "description"
             const val PRIORITY = "priority"
             const val IS_COMPLETED = "isCompleted"
+            const val IMAGE_PATH = "imagePath"
+            const val LOCATION = "location"
         }
     }
 }
