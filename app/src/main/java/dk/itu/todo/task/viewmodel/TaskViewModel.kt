@@ -9,7 +9,13 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = TaskRepository(application)
 
-    fun addTask(title: String, description: String, priority: Int, isCompleted: Boolean) {
+    fun addTask(
+        title: String,
+        description: String,
+        priority: Int,
+        isCompleted: Boolean,
+        selectedLocation: Any?
+    ) {
         val task = Task(
             title = title,
             description = description,
