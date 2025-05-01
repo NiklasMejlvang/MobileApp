@@ -38,6 +38,8 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var locationNames: MutableList<String>
     private val REQUEST_CODE_ADD_LOCATION = 1
 
+    private lateinit var locationRepository: LocationRepository
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,8 @@ class TaskActivity : AppCompatActivity() {
 
         spinner          = findViewById(R.id.spinner_choose_location)
         addLocationBtn   = findViewById(R.id.button_add_location)
+
+        locationRepository = LocationRepository(this)
 
         setupLocationSpinner()
         addLocationBtn.setOnClickListener {
@@ -74,7 +78,7 @@ class TaskActivity : AppCompatActivity() {
     }
 
     private fun setupLocationSpinner() {
-        locations = LocationRepository.getAll()
+        locations = locationRepository.getAll()
         locationNames = locations.map { it.name }.toMutableList()
 
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationNames)

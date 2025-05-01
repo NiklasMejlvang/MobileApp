@@ -22,6 +22,13 @@ class DBCreate(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, nul
                     TaskTable.Cols.LOCATION + " TEXT" +
                     ");"
         )
+        db.execSQL(
+            "CREATE TABLE Locations (" +
+                    "name TEXT NOT NULL, " +
+                    "latitude REAL NOT NULL, " +
+                    "longitude REAL NOT NULL" +
+                    ");"
+        )
     }
 
     private fun addItem(db: SQLiteDatabase, what: String, where: String) {

@@ -11,11 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import dk.itu.todo.model.Location
 import dk.itu.todo.model.LocationRepository
 import dk.itu.todo.R
+import java.io.IOException
 import java.util.Locale
 
 class AddLocationActivity : AppCompatActivity() {
-
-    //New class for location functionality
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +23,8 @@ class AddLocationActivity : AppCompatActivity() {
         val nameInput = findViewById<EditText>(R.id.editTextLocationName)
         val addressInput = findViewById<EditText>(R.id.editTextLocationAddress)
         val saveButton = findViewById<Button>(R.id.buttonSaveLocation)
+
+        val locationRepository = LocationRepository(this)
 
         saveButton.setOnClickListener {
             val name = nameInput.text.toString()
@@ -35,7 +36,16 @@ class AddLocationActivity : AppCompatActivity() {
             }
 
             val geocoder = Geocoder(this, Locale.getDefault())
-            val results = geocoder.getFromLocationName(address, 1)
+            val results = try {
+                if (Geocoder.isPresent()) {
+                    geocoder.getFromLocationName(address, 1)
+                } else {
+                    null
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                null
+            }
 
             if (!results.isNullOrEmpty()) {
                 val location = results[0]
@@ -43,7 +53,7 @@ class AddLocationActivity : AppCompatActivity() {
                 val longitude = location.longitude
 
                 val newLocation = Location(name, latitude, longitude)
-                LocationRepository.addLocation(newLocation)
+                locationRepository.addLocation(newLocation)
 
                 val resultIntent = Intent().apply {
                     putExtra("name", newLocation.name)
