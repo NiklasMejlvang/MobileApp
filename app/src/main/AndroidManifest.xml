@@ -15,6 +15,8 @@
 
         <activity android:name=".task.view.TaskActivity" />
 
+        <activity android:name=".model.task.view.AddLocationActivity" />
+
         <activity android:name=".taskList.view.TaskListActivity"
             android:exported="true">
             <intent-filter>

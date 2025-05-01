@@ -18,7 +18,7 @@ class DBCreate(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, nul
                     TaskTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
                     TaskTable.Cols.PRIORITY + " INTEGER NOT NULL, " +
                     TaskTable.Cols.IS_COMPLETED + " INTEGER NOT NULL, " +
-                    TaskTable.Cols.IMAGE_PATH + " TEXT" +
+                    TaskTable.Cols.IMAGE_PATH + " TEXT, " +
                     TaskTable.Cols.LOCATION + " TEXT" +
                     ");"
         )
@@ -34,5 +34,15 @@ class DBCreate(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         )
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion < 2) {
+            // Add the two missing columns to existing installs
+            db.execSQL(
+                "ALTER TABLE ${TaskTable.NAME} ADD COLUMN ${TaskTable.Cols.IMAGE_PATH} TEXT;"
+            )
+            db.execSQL(
+                "ALTER TABLE ${TaskTable.NAME} ADD COLUMN ${TaskTable.Cols.LOCATION} TEXT;"
+            )
+        }
+    }
 }
