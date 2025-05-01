@@ -55,6 +55,12 @@ class AddLocationActivity : AppCompatActivity() {
                 val newLocation = Location(name, latitude, longitude)
                 locationRepository.addLocation(newLocation)
 
+                Toast.makeText(
+                    this,
+                    "Location added: $name\nLat: $latitude, Lon: $longitude",
+                    Toast.LENGTH_LONG
+                ).show()
+
                 val resultIntent = Intent().apply {
                     putExtra("name", newLocation.name)
                     putExtra("latitude", newLocation.latitude)
