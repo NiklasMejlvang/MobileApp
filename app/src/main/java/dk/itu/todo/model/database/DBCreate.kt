@@ -18,7 +18,7 @@ class DBCreate(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, nul
                     TaskTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
                     TaskTable.Cols.PRIORITY + " INTEGER NOT NULL, " +
                     TaskTable.Cols.IS_COMPLETED + " INTEGER NOT NULL, " +
-                    TaskTable.Cols.IMAGE_PATH + " TEXT" +
+                    TaskTable.Cols.IMAGE_PATH + " TEXT, " +
                     TaskTable.Cols.LOCATION + " TEXT" +
                     ");"
         )

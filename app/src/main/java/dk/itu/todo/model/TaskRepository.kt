@@ -33,7 +33,7 @@ class TaskRepository(context: Context) {
                     "${TaskTable.Cols.IS_COMPLETED}, " +
                     "${TaskTable.Cols.IMAGE_PATH}, " +
                     "${TaskTable.Cols.LOCATION}," +
-            arrayOf(task.title, task.description, task.priority, if (task.isCompleted) 1 else 0, task.imagePath)
+            arrayOf(task.title, task.description, task.priority, if (task.isCompleted) 1 else 0, task.imagePath, task.location)
         )
 
     }
