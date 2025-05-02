@@ -25,7 +25,7 @@ class TaskListActivity : AppCompatActivity() {
         taskListViewModel = ViewModelProvider(this)[TaskListViewModel::class.java]
 
         rv = findViewById(R.id.rvTaskList)
-        adapter = TaskAdapter(mutableListOf())
+        adapter = TaskAdapter(taskListViewModel)
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(this)
 
@@ -39,12 +39,16 @@ class TaskListActivity : AppCompatActivity() {
             taskListViewModel.deleteTask(task.title)
         }
 
+        adapter.setOnCompleteClickListener { task ->
+            taskListViewModel.updateTaskCompletion(task)
+        }
+
         findViewById<Button>(R.id.button_add_task).setOnClickListener {
             startActivity(Intent(this, TaskActivity::class.java))
         }
 
         taskListViewModel.tasks.observe(this) { tasks ->
-            adapter.setTasks(tasks)
+            adapter.submitList(tasks)
         }
     }
 

@@ -26,7 +26,8 @@ class TaskRepository(context: Context) {
 
         val cursor = db.query(
             TaskTable.NAME, null, null, null,
-            null, null, null
+            null, null, "${TaskTable.Cols.IS_COMPLETED} ASC, ${TaskTable.Cols.PRIORITY} ASC"
+
         )
         val tasks = mutableListOf<Task>()
         val wrappedCursor = TaskCursorWrapper(cursor)
@@ -56,6 +57,13 @@ class TaskRepository(context: Context) {
         val db = dbHelper.writableDatabase
         db.delete(TaskTable.NAME, "${TaskTable.Cols.TITLE} = ?", arrayOf(title))
     }
+
+
+    fun updateTaskCompletion(task: Task) {
+        val db = dbHelper.writableDatabase
+        db.execSQL(
+            "UPDATE ${TaskTable.NAME} SET ${TaskTable.Cols.IS_COMPLETED} = ? WHERE ${TaskTable.Cols.TITLE} = ?",
+            arrayOf(if (task.isCompleted) 1 else 0, task.title)
 
     fun updateTask(oldTitle: String, newTask: Task) {
         val db = dbHelper.writableDatabase

@@ -22,4 +22,9 @@ class TaskListViewModel(application: Application)
         repository.deleteTask(title)
         loadTasks()
     }
-}
+
+    fun updateTaskCompletion(task: Task) {
+        repository.updateTaskCompletion(task)
+        loadTasks()
+    }
+    }
