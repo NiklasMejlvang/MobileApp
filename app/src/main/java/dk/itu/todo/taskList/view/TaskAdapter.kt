@@ -14,6 +14,13 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
 
     private var onDeleteClick: ((Task) -> Unit)? = null
 
+    private var onItemClick: ((Task) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (Task) -> Unit) {
+        onItemClick = listener
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListViewHolder {
         val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TaskListViewHolder(binding)
@@ -23,6 +30,7 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
     override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) {
         val task = tasks[position]
         holder.binding.apply {
+            root.setOnClickListener { onItemClick?.invoke(task) }
             tvTitle.text = task.title
             tvDescription.text = task.description
             tvPriority.text = task.priority.toString()

@@ -1,6 +1,6 @@
 package dk.itu.todo.task.view
 
-
+import dk.itu.todo.model.TaskRepository
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
@@ -33,6 +34,11 @@ import java.io.File
 
 class TaskActivity : AppCompatActivity() {
 
+    companion object {
+        // NEW: key for passing in the task to edit
+        const val EXTRA_TASK_TITLE = "dk.itu.todo.task.TASK_TITLE"
+    }
+
     private lateinit var titleEt: EditText
     private lateinit var descEt: EditText
     private lateinit var prioEt: EditText
@@ -41,6 +47,7 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var spinner: Spinner
     private lateinit var addLocationBtn: Button
+
 
     private lateinit var viewModel: TaskViewModel
 
@@ -64,14 +71,28 @@ class TaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
-        titleEt    = findViewById(R.id.etTitle)
-        descEt     = findViewById(R.id.etDescription)
-        prioEt     = findViewById(R.id.etPriority)
-        takePicBtn = findViewById(R.id.button_take_picture)
-        addBtn     = findViewById(R.id.button_add_task)
-        imageView  = findViewById(R.id.imageViewTask)
-        spinner          = findViewById(R.id.spinner_choose_location)
-        addLocationBtn   = findViewById(R.id.button_add_location)
+        titleEt        = findViewById(R.id.etTitle)
+        descEt         = findViewById(R.id.etDescription)
+        prioEt         = findViewById(R.id.etPriority)
+        takePicBtn     = findViewById(R.id.button_take_picture)
+        addBtn         = findViewById(R.id.button_add_task)
+        imageView      = findViewById(R.id.imageViewTask)
+        spinner        = findViewById(R.id.spinner_choose_location)
+        addLocationBtn = findViewById(R.id.button_add_location)
+
+
+
+        val existingTitle = intent.getStringExtra(EXTRA_TASK_TITLE)
+        existingTitle?.let { title ->
+            val task = TaskRepository(this)
+                .getAllTasks()
+                .first { it.title == title }
+            titleEt.setText(task.title)
+            descEt.setText(task.description)
+            prioEt.setText(task.priority.toString())
+            task.imagePath?.let { imageView.setImageURI(Uri.fromFile(File(it))) }
+            addBtn.text = "Save Changes"
+        }
 
         viewModel = ViewModelProvider(this)[TaskViewModel::class.java]
         locationRepository = LocationRepository(this)
@@ -106,7 +127,20 @@ class TaskActivity : AppCompatActivity() {
             val desc  = descEt.text.toString().trim()
             val prio  = prioEt.text.toString().toIntOrNull() ?: 0
 
-            viewModel.addTask(title, desc, prio, imagePath, selectedLocation)
+            if (existingTitle != null) {
+                // EDIT: update the existing task
+                viewModel.updateTask(
+                    oldTitle     = existingTitle,
+                    title        = title,
+                    description  = desc,
+                    priority     = prio,
+                    imagePath    = imagePath,
+                    location     = selectedLocation
+                )
+            } else {
+                // NEW: insert a fresh task
+                viewModel.addTask(title, desc, prio, imagePath, selectedLocation)
+            }
 
             finish()
         }
