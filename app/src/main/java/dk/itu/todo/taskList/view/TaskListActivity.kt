@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dk.itu.todo.R
-import dk.itu.todo.model.Task
 import dk.itu.todo.task.view.TaskActivity
 import dk.itu.todo.taskList.viewmodel.TaskListViewModel
 
@@ -25,7 +24,7 @@ class TaskListActivity : AppCompatActivity() {
         taskListViewModel = ViewModelProvider(this)[TaskListViewModel::class.java]
 
         rv = findViewById(R.id.rvTaskList)
-        adapter = TaskAdapter(mutableListOf())
+        adapter = TaskAdapter(taskListViewModel)
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(this)
 
@@ -42,12 +41,7 @@ class TaskListActivity : AppCompatActivity() {
         }
 
         taskListViewModel.tasks.observe(this) { tasks ->
-            val sortedTasks = tasks.sortedWith(
-                compareBy<Task> { it.priority }.thenBy { it.isCompleted }
-            )
-            rv.post {
-                adapter.setTasks(sortedTasks)
-            }
+            adapter.submitList(tasks)
         }
     }
 

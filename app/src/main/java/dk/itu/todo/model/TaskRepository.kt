@@ -25,7 +25,8 @@ class TaskRepository(context: Context) {
 
         val cursor = db.query(
             TaskTable.NAME, null, null, null,
-            null, null, null
+            null, null, "${TaskTable.Cols.IS_COMPLETED} ASC, ${TaskTable.Cols.PRIORITY} ASC"
+
         )
         val tasks = mutableListOf<Task>()
         val wrappedCursor = TaskCursorWrapper(cursor)
