@@ -26,7 +26,7 @@ class TaskRepository(context: Context) {
 
         val cursor = db.query(
             TaskTable.NAME, null, null, null,
-            null, null, "${TaskTable.Cols.IS_COMPLETED} ASC, ${TaskTable.Cols.PRIORITY} ASC"
+            null, null, "${Cols.IS_COMPLETED} ASC, ${Cols.PRIORITY} ASC"
 
         )
         val tasks = mutableListOf<Task>()
@@ -42,12 +42,12 @@ class TaskRepository(context: Context) {
         val db = dbHelper.writableDatabase
         db.execSQL(
             "INSERT INTO ${TaskTable.NAME} (" +
-                    "${TaskTable.Cols.TITLE}, " +
-                    "${TaskTable.Cols.DESCRIPTION}, " +
-                    "${TaskTable.Cols.PRIORITY}, " +
-                    "${TaskTable.Cols.IS_COMPLETED}, " +
-                    "${TaskTable.Cols.IMAGE_PATH}, " +
-                    "${TaskTable.Cols.LOCATION}" +
+                    "${Cols.TITLE}, " +
+                    "${Cols.DESCRIPTION}, " +
+                    "${Cols.PRIORITY}, " +
+                    "${Cols.IS_COMPLETED}, " +
+                    "${Cols.IMAGE_PATH}, " +
+                    "${Cols.LOCATION}" +
                     ") VALUES (?, ?, ?, ?, ?, ?)",
             arrayOf(task.title, task.description, task.priority, if (task.isCompleted) 1 else 0, task.imagePath, task.location)
         )
@@ -55,15 +55,16 @@ class TaskRepository(context: Context) {
 
     fun deleteTask(title: String) {
         val db = dbHelper.writableDatabase
-        db.delete(TaskTable.NAME, "${TaskTable.Cols.TITLE} = ?", arrayOf(title))
+        db.delete(TaskTable.NAME, "${Cols.TITLE} = ?", arrayOf(title))
     }
 
 
     fun updateTaskCompletion(task: Task) {
         val db = dbHelper.writableDatabase
         db.execSQL(
-            "UPDATE ${TaskTable.NAME} SET ${TaskTable.Cols.IS_COMPLETED} = ? WHERE ${TaskTable.Cols.TITLE} = ?",
-            arrayOf(if (task.isCompleted) 1 else 0, task.title)
+            "UPDATE ${TaskTable.NAME} SET ${Cols.IS_COMPLETED} = ? WHERE ${Cols.TITLE} = ?",
+            arrayOf(if (task.isCompleted) 1 else 0, task.title))
+    }
 
     fun updateTask(oldTitle: String, newTask: Task) {
         val db = dbHelper.writableDatabase
