@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dk.itu.todo.R
+import dk.itu.todo.model.Task
 import dk.itu.todo.task.view.TaskActivity
 import dk.itu.todo.taskList.viewmodel.TaskListViewModel
 
@@ -32,12 +33,21 @@ class TaskListActivity : AppCompatActivity() {
             taskListViewModel.deleteTask(task.title)
         }
 
+        adapter.setOnCompleteClickListener { task ->
+            taskListViewModel.updateTaskCompletion(task)
+        }
+
         findViewById<Button>(R.id.button_add_task).setOnClickListener {
             startActivity(Intent(this, TaskActivity::class.java))
         }
 
         taskListViewModel.tasks.observe(this) { tasks ->
-            adapter.setTasks(tasks)
+            val sortedTasks = tasks.sortedWith(
+                compareBy<Task> { it.priority }.thenBy { it.isCompleted }
+            )
+            rv.post {
+                adapter.setTasks(sortedTasks)
+            }
         }
     }
 

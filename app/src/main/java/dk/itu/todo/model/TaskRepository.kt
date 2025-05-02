@@ -1,5 +1,6 @@
 package dk.itu.todo.model
 
+import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import dk.itu.todo.model.database.DBCreate
@@ -53,5 +54,13 @@ class TaskRepository(context: Context) {
     fun deleteTask(title: String) {
         val db = dbHelper.writableDatabase
         db.delete(TaskTable.NAME, "${TaskTable.Cols.TITLE} = ?", arrayOf(title))
+    }
+
+    fun updateTaskCompletion(task: Task) {
+        val db = dbHelper.writableDatabase
+        db.execSQL(
+            "UPDATE ${TaskTable.NAME} SET ${TaskTable.Cols.IS_COMPLETED} = ? WHERE ${TaskTable.Cols.TITLE} = ?",
+            arrayOf(if (task.isCompleted) 1 else 0, task.title)
+        )
     }
 }

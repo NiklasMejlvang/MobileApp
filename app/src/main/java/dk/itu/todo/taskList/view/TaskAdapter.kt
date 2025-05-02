@@ -11,6 +11,7 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
     inner class TaskListViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root)
 
     private var onDeleteClick: ((Task) -> Unit)? = null
+    private var onCompleteClick: ((Task) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListViewHolder {
         val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,6 +29,11 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
             btnDelete.setOnClickListener {
                 onDeleteClick?.invoke(task)
             }
+
+            cbDone.setOnCheckedChangeListener { _, isChecked ->
+                task.isCompleted = isChecked
+                onCompleteClick?.invoke(task)
+            }
         }
     }
 
@@ -36,10 +42,20 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
     fun setTasks(newTasks: List<Task>) {
         tasks.clear()
         tasks.addAll(newTasks)
+        sortTasks()
         notifyDataSetChanged()
+    }
+
+    private fun sortTasks() {
+        tasks.sortWith(compareBy<Task> { it.priority }.thenBy { it.isCompleted })
     }
 
     fun setOnDeleteClickListener(listener: (Task) -> Unit) {
         onDeleteClick = listener
     }
+
+    fun setOnCompleteClickListener(listener: (Task) -> Unit) {
+        onCompleteClick = listener
+    }
 }
+

@@ -15,11 +15,20 @@ class TaskListViewModel(application: Application)
     val tasks: LiveData<List<Task>> get() = _tasks
 
     fun loadTasks() {
-        _tasks.value = repository.getAllTasks()
+        val sortedTasks = repository.getAllTasks().sortedWith(
+            compareBy<Task> { it.priority }.thenBy { it.isCompleted }
+        )
+        _tasks.value = sortedTasks
     }
 
     fun deleteTask(title: String) {
         repository.deleteTask(title)
         loadTasks()
     }
-}
+
+    fun updateTaskCompletion(task: Task) {
+        repository.updateTaskCompletion(task)
+        loadTasks()
+    }
+
+    }
