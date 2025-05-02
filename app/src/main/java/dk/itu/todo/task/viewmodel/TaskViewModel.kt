@@ -19,6 +19,13 @@ class TaskViewModel(application: Application)
     ) {
         repository.addTask(
             Task(title, description, priority, isCompleted, imagePath)
+        selectedLocation: Any?
+    ) {
+        val task = Task(
+            title = title,
+            description = description,
+            priority = priority,
+            isCompleted = isCompleted
         )
     }
 }
