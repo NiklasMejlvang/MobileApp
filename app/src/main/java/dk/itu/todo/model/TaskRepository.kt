@@ -1,10 +1,12 @@
 package dk.itu.todo.model
 
+import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import dk.itu.todo.model.database.DBCreate
 import dk.itu.todo.model.database.TaskCursorWrapper
 import dk.itu.todo.model.database.TasksDbSchema.TaskTable
+import dk.itu.todo.model.database.TasksDbSchema.TaskTable.Cols
 
 class TaskRepository(context: Context) {
     private val dbHelper = DBCreate(context)
@@ -53,5 +55,23 @@ class TaskRepository(context: Context) {
     fun deleteTask(title: String) {
         val db = dbHelper.writableDatabase
         db.delete(TaskTable.NAME, "${TaskTable.Cols.TITLE} = ?", arrayOf(title))
+    }
+
+    fun updateTask(oldTitle: String, newTask: Task) {
+        val db = dbHelper.writableDatabase
+        val cv = ContentValues().apply {
+            put(Cols.TITLE, newTask.title)
+            put(Cols.DESCRIPTION, newTask.description)
+            put(Cols.PRIORITY, newTask.priority)
+            put(Cols.IS_COMPLETED, if (newTask.isCompleted) 1 else 0)
+            put(Cols.IMAGE_PATH, newTask.imagePath)
+            put(Cols.LOCATION, newTask.location)
+        }
+        db.update(
+            TaskTable.NAME,
+            cv,
+            "${Cols.TITLE} = ?",
+            arrayOf(oldTitle)
+        )
     }
 }
