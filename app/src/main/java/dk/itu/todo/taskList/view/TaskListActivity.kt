@@ -1,5 +1,6 @@
 package dk.itu.todo.taskList.view
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -28,6 +29,12 @@ class TaskListActivity : AppCompatActivity() {
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(this)
 
+        adapter.setOnItemClickListener { task ->
+            val intent = Intent(this, TaskActivity::class.java).apply {
+                putExtra(TaskActivity.EXTRA_TASK_TITLE, task.title)
+            }
+            startActivity(intent)
+        }
         adapter.setOnDeleteClickListener { task ->
             taskListViewModel.deleteTask(task.title)
         }

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import dk.itu.todo.databinding.ItemTaskBinding
 import dk.itu.todo.model.Task
 import dk.itu.todo.taskList.viewmodel.TaskListViewModel
+import android.view.View
+import android.graphics.BitmapFactory
 
 class TaskAdapter(
     private val viewModel: TaskListViewModel
@@ -18,14 +20,23 @@ class TaskAdapter(
 
     inner class TaskListViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root)
 
+    private var onItemClick: ((Task) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (Task) -> Unit) {
+        onItemClick = listener
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListViewHolder {
         val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TaskListViewHolder(binding)
     }
 
+
     override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) {
         val task = getItem(position)
         holder.binding.apply {
+            root.setOnClickListener { onItemClick?.invoke(task) }
             tvTitle.text = task.title
             tvDescription.text = task.description
             tvPriority.text = task.priority.toString()
@@ -38,6 +49,16 @@ class TaskAdapter(
                 viewModel.updateTaskCompletion(task)
             }
 
+            if (!task.imagePath.isNullOrEmpty()) {
+                imageViewTaskItem.visibility = View.VISIBLE
+
+
+                val bmp = BitmapFactory.decodeFile(task.imagePath)
+                imageViewTaskItem.setImageBitmap(bmp)
+
+            } else {
+                imageViewTaskItem.visibility = View.GONE
+            }
             btnDelete.setOnClickListener {
                 onDeleteClick?.invoke(task)
             }
