@@ -7,16 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import dk.itu.todo.model.Task
 import dk.itu.todo.model.TaskRepository
 
-class TaskListViewModel(application: Application) : AndroidViewModel(application) {
+class TaskListViewModel(application: Application)
+    : AndroidViewModel(application) {
 
     private val repository = TaskRepository(application)
     private val _tasks = MutableLiveData<List<Task>>()
     val tasks: LiveData<List<Task>> get() = _tasks
 
-    fun loadTasks() {
-        _tasks.value = repository.getAllTasks()
-    }
-
+    fun loadTasks() { _tasks.value = repository.getAllTasks() }
     fun deleteTask(title: String) {
         repository.deleteTask(title)
         loadTasks()

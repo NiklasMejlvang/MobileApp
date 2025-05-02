@@ -5,7 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import dk.itu.todo.model.Task
 import dk.itu.todo.model.TaskRepository
 
-class TaskViewModel(application: Application) : AndroidViewModel(application) {
+class TaskViewModel(application: Application)
+    : AndroidViewModel(application) {
 
     private val repository = TaskRepository(application)
 
@@ -14,6 +15,10 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         description: String,
         priority: Int,
         isCompleted: Boolean,
+        imagePath: String?
+    ) {
+        repository.addTask(
+            Task(title, description, priority, isCompleted, imagePath)
         selectedLocation: Any?
     ) {
         val task = Task(
@@ -22,6 +27,5 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
             priority = priority,
             isCompleted = isCompleted
         )
-        repository.addTask(task)
     }
 }

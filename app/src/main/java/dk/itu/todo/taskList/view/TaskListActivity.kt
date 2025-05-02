@@ -4,49 +4,51 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dk.itu.todo.R
-import dk.itu.todo.task.view.TaskActivity
-import dk.itu.todo.taskList.viewmodel.TaskListViewModel
+import dk.itu.todo.model.TaskDB
+import dk.itu.todo.model.Task
 
-class TaskListActivity : AppCompatActivity () {
-
-    private lateinit var rvTaskList: RecyclerView
-    private lateinit var taskAdapter: TaskAdapter
-    private lateinit var viewModel: TaskListViewModel
+class TaskListActivity : AppCompatActivity() {
+    private lateinit var rv: RecyclerView
+    private lateinit var adapter: TaskAdapter
+    private lateinit var dbHelper: TaskDB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_list)
 
-        rvTaskList = findViewById(R.id.rv_task_list)
-        taskAdapter = TaskAdapter(mutableListOf())
+        dbHelper = TaskDB(this)
+        rv       = findViewById(R.id.rvTaskList)
+        adapter  = TaskAdapter(mutableListOf())
+        rv.adapter        = adapter
+        rv.layoutManager  = LinearLayoutManager(this)
 
-        taskAdapter.onDeleteClick = { task ->
-            viewModel.deleteTask(task.title)
-            taskAdapter.deleteTask(task)
-        }
-
-        rvTaskList.adapter = taskAdapter
-        rvTaskList.layoutManager = LinearLayoutManager(this)
-
-        viewModel = ViewModelProvider(this)[TaskListViewModel::class.java]
-
-        viewModel.tasks.observe(this) { tasks ->
-            taskAdapter.setTasks(tasks)
-        }
-
-        val buttonAddTask = findViewById<Button>(R.id.button_add_task)
-        buttonAddTask.setOnClickListener {
-            val intent = Intent(this, TaskActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.button_add_task).setOnClickListener {
+            startActivity(Intent(this, dk.itu.todo.task.view.TaskActivity::class.java))
         }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadTasks()
+        // reload tasks from DB
+        val list = mutableListOf<Task>()
+        val db   = dbHelper.readableDatabase
+        val c    = db.rawQuery(
+            "SELECT Title, Description, Priority, IsCompleted, ImagePath FROM Tasks",
+            null
+        )
+        while (c.moveToNext()) {
+            list += Task(
+                title       = c.getString(0),
+                description = c.getString(1),
+                priority    = c.getInt(2),
+                isCompleted = c.getInt(3) == 1,
+                imagePath   = c.getString(4)
+            )
+        }
+        c.close()
+        adapter.setTasks(list)
     }
 }

@@ -106,6 +106,21 @@
         app:layout_constraintStart_toEndOf="@id/tvCompleted"
         android:layout_marginStart="8dp"/>
 
+    <ImageView
+        android:id="@+id/imageViewTask"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="Task Image"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/button_take_picture"
+        android:text="Take Picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
     <!-- Add Task Button -->
     <Button
         android:id="@+id/button_add_task"
