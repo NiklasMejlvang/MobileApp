@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.RecyclerView
 import dk.itu.todo.model.Task
 import android.view.LayoutInflater
 import dk.itu.todo.databinding.ItemTaskBinding
+import android.view.View
+import android.graphics.BitmapFactory
 
 class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<TaskAdapter.TaskListViewHolder>() {
 
@@ -24,6 +26,7 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
         return TaskListViewHolder(binding)
     }
 
+
     override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) {
         val task = tasks[position]
         holder.binding.apply {
@@ -33,8 +36,16 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
             tvPriority.text = task.priority.toString()
             cbDone.isChecked = task.isCompleted
 
+            if (!task.imagePath.isNullOrEmpty()) {
+                imageViewTaskItem.visibility = View.VISIBLE
 
 
+                val bmp = BitmapFactory.decodeFile(task.imagePath)
+                imageViewTaskItem.setImageBitmap(bmp)
+
+            } else {
+                imageViewTaskItem.visibility = View.GONE
+            }
             btnDelete.setOnClickListener {
                 onDeleteClick?.invoke(task)
             }
