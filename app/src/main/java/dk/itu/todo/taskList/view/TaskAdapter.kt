@@ -39,14 +39,6 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
         notifyDataSetChanged()
     }
 
-    fun deleteTask(task: Task) {
-        val position = tasks.indexOf(task)
-        if (position >= 0) {
-            tasks.removeAt(position)
-            notifyItemRemoved(position)
-        }
-    }
-
     fun setOnDeleteClickListener(listener: (Task) -> Unit) {
         onDeleteClick = listener
     }
