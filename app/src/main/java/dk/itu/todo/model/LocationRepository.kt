@@ -27,9 +27,4 @@ class LocationRepository(context: Context) {
         cursor.close()
         return locations
     }
-
-    fun clearAll() {
-        val db = dbHelper.writableDatabase
-        db.delete("Locations", null, null)
-    }
 }

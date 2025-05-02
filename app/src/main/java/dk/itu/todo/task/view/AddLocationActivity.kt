@@ -1,4 +1,4 @@
-package dk.itu.todo.model.task.view
+package dk.itu.todo.task.view
 
 import android.app.Activity
 import android.content.Intent

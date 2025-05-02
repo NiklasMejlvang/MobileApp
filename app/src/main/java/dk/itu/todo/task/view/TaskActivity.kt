@@ -2,43 +2,33 @@ package dk.itu.todo.task.view
 
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-
-import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Spinner
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-
-import android.widget.ImageView
-import android.widget.Toast
-import dk.itu.todo.R
-import dk.itu.todo.model.TaskDB
-import java.io.File
-
-import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
-import dk.itu.todo.task.viewmodel.TaskViewModel
-
-
-
+import dk.itu.todo.R
 import dk.itu.todo.model.Location
 import dk.itu.todo.model.LocationRepository
-import dk.itu.todo.model.task.view.AddLocationActivity
+import dk.itu.todo.model.database.DBCreate
+import dk.itu.todo.task.viewmodel.TaskViewModel
+import java.io.File
 
 
 class TaskActivity : AppCompatActivity() {
@@ -46,29 +36,28 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var titleEt: EditText
     private lateinit var descEt: EditText
     private lateinit var prioEt: EditText
-    private lateinit var doneCb: CheckBox
     private lateinit var takePicBtn: Button
     private lateinit var addBtn: Button
     private lateinit var imageView: ImageView
+    private lateinit var spinner: Spinner
+    private lateinit var addLocationBtn: Button
 
-    private lateinit var dbHelper: TaskDB
+    private lateinit var viewModel: TaskViewModel
+
+    private lateinit var dbHelper: DBCreate
     private var imagePath: String? = null
     private var photoUri: Uri? = null
+    private lateinit var locationRepository: LocationRepository
 
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
 
-    companion object {
-        private const val REQUEST_CAMERA_PERMISSION = 100
-    }
+    private val REQUEST_CODE_ADD_LOCATION = 1
+    private val REQUEST_CAMERA_PERMISSION = 100
 
-    private lateinit var spinner: Spinner
-    private lateinit var addLocationBtn: Button
     private var selectedLocation: Location? = null
     private lateinit var locations: List<Location>
     private lateinit var locationNames: MutableList<String>
-    private val REQUEST_CODE_ADD_LOCATION = 1
 
-    private lateinit var locationRepository: LocationRepository
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,25 +67,23 @@ class TaskActivity : AppCompatActivity() {
         titleEt    = findViewById(R.id.etTitle)
         descEt     = findViewById(R.id.etDescription)
         prioEt     = findViewById(R.id.etPriority)
-        doneCb     = findViewById(R.id.cbCompleted)
         takePicBtn = findViewById(R.id.button_take_picture)
         addBtn     = findViewById(R.id.button_add_task)
         imageView  = findViewById(R.id.imageViewTask)
+        spinner          = findViewById(R.id.spinner_choose_location)
+        addLocationBtn   = findViewById(R.id.button_add_location)
 
-        dbHelper = TaskDB(this)
+        viewModel = ViewModelProvider(this)[TaskViewModel::class.java]
+        locationRepository = LocationRepository(this)
 
-        takePictureLauncher = registerForActivityResult(
-            ActivityResultContracts.TakePicture()
-        ) { success ->
-            if (success) {               
-                val uri = photoUri
-                    ?: return@registerForActivityResult Toast
-                        .makeText(this, "No photo URI!", Toast.LENGTH_SHORT)
-                        .show()
-                imageView.setImageURI(uri)
-            } else {
-                Toast.makeText(this, "Picture not taken", Toast.LENGTH_SHORT).show()
-            }
+        setupLocationSpinner()
+        setupTakePicture()
+
+        addLocationBtn.setOnClickListener {
+            startActivityForResult(
+                Intent(this, AddLocationActivity::class.java),
+                REQUEST_CODE_ADD_LOCATION
+            )
         }
 
         takePicBtn.setOnClickListener {
@@ -114,32 +101,13 @@ class TaskActivity : AppCompatActivity() {
             }
         }
 
-        spinner          = findViewById(R.id.spinner_choose_location)
-        addLocationBtn   = findViewById(R.id.button_add_location)
-
-        locationRepository = LocationRepository(this)
-
-        setupLocationSpinner()
-        addLocationBtn.setOnClickListener {
-            startActivityForResult(
-                Intent(this, AddLocationActivity::class.java),
-                REQUEST_CODE_ADD_LOCATION
-            )
-        }
-
-        viewModel = ViewModelProvider(this)[TaskViewModel::class.java]
-
         addBtn.setOnClickListener {
             val title = titleEt.text.toString().trim()
             val desc  = descEt.text.toString().trim()
             val prio  = prioEt.text.toString().toIntOrNull() ?: 0
-            val done  = if (doneCb.isChecked) 1 else 0
 
-            dbHelper.writableDatabase.execSQL(
-                "INSERT INTO Tasks (Title, Description, Priority, IsCompleted, ImagePath) VALUES (?,?,?,?,?)",
-                arrayOf(title, desc, prio, done, imagePath)
-            )
-            viewModel.addTask(title, desc, prio, done, selectedLocation)
+            viewModel.addTask(title, desc, prio, imagePath, selectedLocation)
+
             finish()
         }
     }
@@ -175,6 +143,7 @@ class TaskActivity : AppCompatActivity() {
             photoFile
         )
         takePictureLauncher.launch(photoUri!!)
+    }
 
     private fun setupLocationSpinner() {
         locations = locationRepository.getAll()
@@ -193,6 +162,20 @@ class TaskActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) { }
         }
     }
+
+    private fun setupTakePicture() {
+        takePictureLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                if (success) {
+                    val uri = photoUri ?: return@registerForActivityResult
+                    imageView.setImageURI(uri)
+                } else {
+                    Toast.makeText(this, "Picture not taken", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

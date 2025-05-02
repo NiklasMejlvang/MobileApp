@@ -14,7 +14,10 @@ class TaskListViewModel(application: Application)
     private val _tasks = MutableLiveData<List<Task>>()
     val tasks: LiveData<List<Task>> get() = _tasks
 
-    fun loadTasks() { _tasks.value = repository.getAllTasks() }
+    fun loadTasks() {
+        _tasks.value = repository.getAllTasks()
+    }
+
     fun deleteTask(title: String) {
         repository.deleteTask(title)
         loadTasks()

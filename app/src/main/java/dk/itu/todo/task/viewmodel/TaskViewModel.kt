@@ -2,11 +2,11 @@ package dk.itu.todo.task.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import dk.itu.todo.model.Location
 import dk.itu.todo.model.Task
 import dk.itu.todo.model.TaskRepository
 
-class TaskViewModel(application: Application)
-    : AndroidViewModel(application) {
+class TaskViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = TaskRepository(application)
 
@@ -14,18 +14,17 @@ class TaskViewModel(application: Application)
         title: String,
         description: String,
         priority: Int,
-        isCompleted: Boolean,
-        imagePath: String?
-    ) {
-        repository.addTask(
-            Task(title, description, priority, isCompleted, imagePath)
-        selectedLocation: Any?
+        imagePath: String?,
+        location: Location?
     ) {
         val task = Task(
             title = title,
             description = description,
             priority = priority,
-            isCompleted = isCompleted
+            imagePath = imagePath,
+            isCompleted = false,
+            location = location?.name
         )
+        repository.addTask(task)
     }
 }

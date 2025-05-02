@@ -1,6 +1,5 @@
 package dk.itu.todo.model
 
-import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import dk.itu.todo.model.database.DBCreate
@@ -13,18 +12,15 @@ class TaskRepository(context: Context) {
     fun getAllTasks(): List<Task> {
         val db = dbHelper.readableDatabase
 
-        // — debug: list actual columns in your tasks table —
         db.rawQuery("PRAGMA table_info(${TaskTable.NAME});", null).use { pragmaCursor ->
             val cols = mutableListOf<String>()
             while (pragmaCursor.moveToNext()) {
-                // "name" is the column in the pragma result that holds each column’s name
                 cols += pragmaCursor.getString(
                     pragmaCursor.getColumnIndexOrThrow("name")
                 )
             }
             Log.d("DB_SCHEMA", "Columns in ${TaskTable.NAME}: $cols")
         }
-
 
         val cursor = db.query(
             TaskTable.NAME, null, null, null,
@@ -52,7 +48,6 @@ class TaskRepository(context: Context) {
                     ") VALUES (?, ?, ?, ?, ?, ?)",
             arrayOf(task.title, task.description, task.priority, if (task.isCompleted) 1 else 0, task.imagePath, task.location)
         )
-
     }
 
     fun deleteTask(title: String) {

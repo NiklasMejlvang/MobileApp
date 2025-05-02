@@ -13,7 +13,7 @@ class TaskCursorWrapper(cursor: Cursor?) : CursorWrapper(cursor) {
             val priority = getInt(getColumnIndex(TaskTable.Cols.PRIORITY))
             val isCompleted = getInt(getColumnIndex(TaskTable.Cols.IS_COMPLETED)) != 0
             val imagePath = getString(getColumnIndex(TaskTable.Cols.IMAGE_PATH))
-            val location = getString(getColumnIndex(TaskTable.Cols.LOCATION))
+            val location = getString(getColumnIndexOrThrow(TaskTable.Cols.LOCATION))
             return Task(title, description, priority, isCompleted, imagePath, location)
         }
 }

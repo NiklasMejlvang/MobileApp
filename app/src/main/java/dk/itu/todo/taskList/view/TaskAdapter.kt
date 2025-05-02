@@ -10,7 +10,7 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
 
     inner class TaskListViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root)
 
-    var onDeleteClick: ((Task) -> Unit)? = null
+    private var onDeleteClick: ((Task) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListViewHolder {
         val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -45,5 +45,9 @@ class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<T
             tasks.removeAt(position)
             notifyItemRemoved(position)
         }
+    }
+
+    fun setOnDeleteClickListener(listener: (Task) -> Unit) {
+        onDeleteClick = listener
     }
 }
