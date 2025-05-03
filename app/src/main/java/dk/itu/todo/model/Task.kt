@@ -7,7 +7,9 @@ data class Task (
     var priority: Int,
     var isCompleted: Boolean,
     val imagePath: String? = null,
-    val location: String? = null
+    val location: String? = null,
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
 ) {
     init {
         if (priority < 1) priority = 1

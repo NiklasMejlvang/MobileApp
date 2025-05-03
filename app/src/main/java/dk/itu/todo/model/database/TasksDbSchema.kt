@@ -12,6 +12,8 @@ class TasksDbSchema {
             const val IS_COMPLETED = "isCompleted"
             const val IMAGE_PATH = "imagePath"
             const val LOCATION = "location"
+            const val LATITUDE = "latitude"
+            const val LONGITUDE = "longitude"
         }
     }
 }

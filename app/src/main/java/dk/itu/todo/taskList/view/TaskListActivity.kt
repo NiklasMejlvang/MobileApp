@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dk.itu.todo.R
+import dk.itu.todo.map.view.MapActivity
 import dk.itu.todo.task.view.TaskActivity
 import dk.itu.todo.taskList.viewmodel.TaskListViewModel
 
@@ -45,6 +46,10 @@ class TaskListActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.button_add_task).setOnClickListener {
             startActivity(Intent(this, TaskActivity::class.java))
+        }
+
+        findViewById<Button>(R.id.button_map).setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java))
         }
 
         taskListViewModel.tasks.observe(this) { tasks ->
