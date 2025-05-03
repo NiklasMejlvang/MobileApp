@@ -38,49 +38,56 @@ class TaskRepository(context: Context) {
         return tasks
     }
 
-    fun addTask(task: Task) {
+    fun addTask(task: Task): Long {
         val db = dbHelper.writableDatabase
-        db.execSQL(
-            "INSERT INTO ${TaskTable.NAME} (" +
-                    "${Cols.TITLE}, " +
-                    "${Cols.DESCRIPTION}, " +
-                    "${Cols.PRIORITY}, " +
-                    "${Cols.IS_COMPLETED}, " +
-                    "${Cols.IMAGE_PATH}, " +
-                    "${Cols.LOCATION}" +
-                    ") VALUES (?, ?, ?, ?, ?, ?)",
-            arrayOf(task.title, task.description, task.priority, if (task.isCompleted) 1 else 0, task.imagePath, task.location)
-        )
+        val cv = ContentValues().apply {
+            put(Cols.TITLE, task.title)
+            put(Cols.DESCRIPTION, task.description)
+            put(Cols.PRIORITY, task.priority)
+            put(Cols.IS_COMPLETED, if (task.isCompleted) 1 else 0)
+            put(Cols.IMAGE_PATH, task.imagePath)
+            put(Cols.LOCATION, task.location)
+        }
+        val newId = db.insert(TaskTable.NAME, null, cv)
+        task.id = newId
+        return newId
     }
 
-    fun deleteTask(title: String) {
+    fun deleteTask(id: Long) {
         val db = dbHelper.writableDatabase
-        db.delete(TaskTable.NAME, "${Cols.TITLE} = ?", arrayOf(title))
+        db.delete(TaskTable.NAME, "${Cols.ID} = ?", arrayOf(id.toString()))
     }
 
 
     fun updateTaskCompletion(task: Task) {
         val db = dbHelper.writableDatabase
-        db.execSQL(
-            "UPDATE ${TaskTable.NAME} SET ${Cols.IS_COMPLETED} = ? WHERE ${Cols.TITLE} = ?",
-            arrayOf(if (task.isCompleted) 1 else 0, task.title))
-    }
-
-    fun updateTask(oldTitle: String, newTask: Task) {
-        val db = dbHelper.writableDatabase
         val cv = ContentValues().apply {
-            put(Cols.TITLE, newTask.title)
-            put(Cols.DESCRIPTION, newTask.description)
-            put(Cols.PRIORITY, newTask.priority)
-            put(Cols.IS_COMPLETED, if (newTask.isCompleted) 1 else 0)
-            put(Cols.IMAGE_PATH, newTask.imagePath)
-            put(Cols.LOCATION, newTask.location)
+            put(Cols.IS_COMPLETED, if (task.isCompleted) 1 else 0)
         }
         db.update(
             TaskTable.NAME,
             cv,
-            "${Cols.TITLE} = ?",
-            arrayOf(oldTitle)
+            "${Cols.ID} = ?",
+            arrayOf(task.id.toString())
+        )
+    }
+
+    fun updateTask(task: Task) {
+        val db = dbHelper.writableDatabase
+        val cv = ContentValues().apply {
+            put(Cols.TITLE,        task.title)
+            put(Cols.DESCRIPTION,  task.description)
+            put(Cols.PRIORITY,     task.priority)
+            put(Cols.IS_COMPLETED, if (task.isCompleted) 1 else 0)
+            put(Cols.IMAGE_PATH,   task.imagePath)
+            put(Cols.LOCATION,     task.location)
+        }
+        // Use the auto-generated ID in the WHERE clause:
+        db.update(
+            TaskTable.NAME,
+            cv,
+            "${Cols.ID} = ?",
+            arrayOf(task.id.toString())
         )
     }
 }

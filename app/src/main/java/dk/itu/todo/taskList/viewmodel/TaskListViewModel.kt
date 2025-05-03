@@ -18,8 +18,8 @@ class TaskListViewModel(application: Application)
         _tasks.value = repository.getAllTasks()
     }
 
-    fun deleteTask(title: String) {
-        repository.deleteTask(title)
+    fun deleteTask(id: Long) {
+        repository.deleteTask(id)
         loadTasks()
     }
 

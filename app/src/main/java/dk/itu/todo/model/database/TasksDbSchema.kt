@@ -5,6 +5,7 @@ class TasksDbSchema {
         const val NAME = "Tasks"
 
         object Cols {
+            const val ID = "id"
             const val TITLE = "title"
             const val DESCRIPTION = "description"
             const val PRIORITY = "priority"
