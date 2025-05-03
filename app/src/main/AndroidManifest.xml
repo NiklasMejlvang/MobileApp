@@ -16,7 +16,7 @@
 
         <activity android:name=".task.view.TaskActivity" />
 
-        <activity android:name=".task.view.AddLocationActivity" />
+        <activity android:name=".addLocation.view.AddLocationActivity" />
 
         <activity android:name=".taskList.view.TaskListActivity"
                   

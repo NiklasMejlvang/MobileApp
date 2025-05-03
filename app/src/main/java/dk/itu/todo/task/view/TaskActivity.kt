@@ -12,7 +12,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
@@ -25,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import dk.itu.todo.R
+import dk.itu.todo.addLocation.view.AddLocationActivity
 import dk.itu.todo.model.Location
 import dk.itu.todo.model.LocationRepository
 import dk.itu.todo.model.database.DBCreate
