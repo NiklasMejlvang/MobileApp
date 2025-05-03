@@ -1,19 +1,15 @@
 package dk.itu.todo.addLocation.view
 
-import AddLocationViewModel
+import dk.itu.todo.addLocation.viewmodel.AddLocationViewModel
 import android.app.Activity
 import android.content.Intent
-import android.location.Geocoder
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import dk.itu.todo.model.Location
 import dk.itu.todo.R
-import java.io.IOException
-import java.util.Locale
 
 class AddLocationActivity : AppCompatActivity() {
 
