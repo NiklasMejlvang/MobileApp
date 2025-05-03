@@ -30,13 +30,13 @@ class TaskListActivity : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this)
 
         adapter.setOnItemClickListener { task ->
-            val intent = Intent(this, TaskActivity::class.java).apply {
-                putExtra(TaskActivity.EXTRA_TASK_TITLE, task.title)
-            }
-            startActivity(intent)
+                val intent = Intent(this, TaskActivity::class.java).apply {
+                        putExtra(TaskActivity.EXTRA_TASK_ID, task.id)
+                   }
+                startActivity(intent)
         }
         adapter.setOnDeleteClickListener { task ->
-            taskListViewModel.deleteTask(task.title)
+            taskListViewModel.deleteTask(task.id)
         }
 
         adapter.setOnCompleteClickListener { task ->

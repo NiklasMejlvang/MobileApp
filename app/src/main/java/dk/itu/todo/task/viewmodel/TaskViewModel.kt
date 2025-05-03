@@ -28,21 +28,23 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         repository.addTask(task)
     }
     fun updateTask(
-        oldTitle: String,
+        id: Long,
         title: String,
         description: String,
         priority: Int,
+        isCompleted: Boolean,
         imagePath: String?,
         location: Location?
     ) {
         val updated = Task(
+            id = id,
             title = title,
             description = description,
             priority = priority,
-            isCompleted = false,       // or preserve from a var you captured earlier
+            isCompleted = isCompleted,
             imagePath = imagePath,
             location = location?.name
         )
-        repository.updateTask(oldTitle, updated)
+        repository.updateTask(updated)
     }
 }

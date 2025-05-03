@@ -4,16 +4,19 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import dk.itu.todo.model.database.TasksDbSchema.TaskTable
+import dk.itu.todo.model.database.TasksDbSchema.TaskTable.Cols
+
 
 class DBCreate(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, null, VERSION) {
     companion object {
-        private const val VERSION = 1
+        private const val VERSION = 4
         const val DATABASE_NAME = "tasks.db"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             "CREATE TABLE " + TaskTable.NAME + "(" +
+                    TaskTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TaskTable.Cols.TITLE + " TEXT NOT NULL, " +
                     TaskTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
                     TaskTable.Cols.PRIORITY + " INTEGER NOT NULL, " +
@@ -43,13 +46,19 @@ class DBCreate(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, nul
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 2) {
-            // Add the two missing columns to existing installs
             db.execSQL(
-                "ALTER TABLE ${TaskTable.NAME} ADD COLUMN ${TaskTable.Cols.IMAGE_PATH} TEXT;"
+                "ALTER TABLE ${TaskTable.NAME} ADD COLUMN ${Cols.IMAGE_PATH} TEXT;"
             )
             db.execSQL(
-                "ALTER TABLE ${TaskTable.NAME} ADD COLUMN ${TaskTable.Cols.LOCATION} TEXT;"
+                "ALTER TABLE ${TaskTable.NAME} ADD COLUMN ${Cols.LOCATION} TEXT;"
             )
         }
-    }
+
+
+        if (oldVersion < 3) {
+            db.execSQL("DROP TABLE IF EXISTS ${TaskTable.NAME}")
+            onCreate(db)
+
+        }
+        }
 }

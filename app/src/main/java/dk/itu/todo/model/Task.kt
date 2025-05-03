@@ -1,6 +1,7 @@
 package dk.itu.todo.model
 
 data class Task (
+    var id: Long = 0L,
     val title: String,
     val description: String,
     var priority: Int,

@@ -36,8 +36,11 @@ class TaskActivity : AppCompatActivity() {
 
     companion object {
         // NEW: key for passing in the task to edit
-        const val EXTRA_TASK_TITLE = "dk.itu.todo.task.TASK_TITLE"
+        const val EXTRA_TASK_ID = "dk.itu.todo.task.TASK_ID"
     }
+
+    private var existingTaskId: Long? = null
+    private var existingIsCompleted: Boolean = false
 
     private lateinit var titleEt: EditText
     private lateinit var descEt: EditText
@@ -82,11 +85,14 @@ class TaskActivity : AppCompatActivity() {
 
 
 
-        val existingTitle = intent.getStringExtra(EXTRA_TASK_TITLE)
-        existingTitle?.let { title ->
+        existingTaskId = intent.getLongExtra(EXTRA_TASK_ID, -1L)
+            .takeIf { it != -1L }
+        existingTaskId?.let { id ->
             val task = TaskRepository(this)
                 .getAllTasks()
-                .first { it.title == title }
+                .first { it.id == id }
+            existingIsCompleted = task.isCompleted
+
             titleEt.setText(task.title)
             descEt.setText(task.description)
             prioEt.setText(task.priority.toString())
@@ -127,18 +133,17 @@ class TaskActivity : AppCompatActivity() {
             val desc  = descEt.text.toString().trim()
             val prio  = prioEt.text.toString().toIntOrNull() ?: 0
 
-            if (existingTitle != null) {
-                // EDIT: update the existing task
+            if (existingTaskId != null) {
                 viewModel.updateTask(
-                    oldTitle     = existingTitle,
-                    title        = title,
-                    description  = desc,
-                    priority     = prio,
-                    imagePath    = imagePath,
-                    location     = selectedLocation
+                    id          = existingTaskId!!,
+                    title       = title,
+                    description = desc,
+                    priority    = prio,
+                    isCompleted = existingIsCompleted,
+                    imagePath   = imagePath,
+                    location    = selectedLocation
                 )
             } else {
-                // NEW: insert a fresh task
                 viewModel.addTask(title, desc, prio, imagePath, selectedLocation)
             }
 
