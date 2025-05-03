@@ -11,6 +11,12 @@
         android:layout_height="wrap_content"
         android:text="Add Task" />
 
+    <Button
+        android:id="@+id/button_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View On Map" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTaskList"
         android:layout_width="match_parent"

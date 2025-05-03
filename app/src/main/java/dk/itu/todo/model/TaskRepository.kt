@@ -47,6 +47,8 @@ class TaskRepository(context: Context) {
             put(Cols.IS_COMPLETED, if (task.isCompleted) 1 else 0)
             put(Cols.IMAGE_PATH, task.imagePath)
             put(Cols.LOCATION, task.location)
+            put(Cols.LATITUDE, task.latitude)
+            put(Cols.LONGITUDE, task.longitude)
         }
         val newId = db.insert(TaskTable.NAME, null, cv)
         task.id = newId
@@ -75,12 +77,14 @@ class TaskRepository(context: Context) {
     fun updateTask(task: Task) {
         val db = dbHelper.writableDatabase
         val cv = ContentValues().apply {
-            put(Cols.TITLE,        task.title)
-            put(Cols.DESCRIPTION,  task.description)
-            put(Cols.PRIORITY,     task.priority)
+            put(Cols.TITLE, task.title)
+            put(Cols.DESCRIPTION, task.description)
+            put(Cols.PRIORITY, task.priority)
             put(Cols.IS_COMPLETED, if (task.isCompleted) 1 else 0)
-            put(Cols.IMAGE_PATH,   task.imagePath)
-            put(Cols.LOCATION,     task.location)
+            put(Cols.IMAGE_PATH, task.imagePath)
+            put(Cols.LOCATION, task.location)
+            put(Cols.LATITUDE, task.latitude)
+            put(Cols.LONGITUDE, task.longitude)
         }
         db.update(
             TaskTable.NAME,

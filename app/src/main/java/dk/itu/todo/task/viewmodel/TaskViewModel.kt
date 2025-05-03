@@ -15,7 +15,9 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         description: String,
         priority: Int,
         imagePath: String?,
-        location: Location?
+        location: Location?,
+        latitude: Double = 0.0,
+        longitude: Double = 0.0
     ) {
         val task = Task(
             title = title,
@@ -23,7 +25,9 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
             priority = priority,
             imagePath = imagePath,
             isCompleted = false,
-            location = location?.name
+            location = location?.name,
+            latitude = location?.latitude ?: latitude,
+            longitude = location?.longitude ?: longitude
         )
         repository.addTask(task)
     }
@@ -34,7 +38,9 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         priority: Int,
         isCompleted: Boolean,
         imagePath: String?,
-        location: Location?
+        location: Location?,
+        latitude: Double = 0.0,
+        longitude: Double = 0.0
     ) {
         val updated = Task(
             id = id,
@@ -43,7 +49,9 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
             priority = priority,
             isCompleted = isCompleted,
             imagePath = imagePath,
-            location = location?.name
+            location = location?.name,
+            latitude = location?.latitude ?: latitude,
+            longitude = location?.longitude ?: longitude
         )
         repository.updateTask(updated)
     }

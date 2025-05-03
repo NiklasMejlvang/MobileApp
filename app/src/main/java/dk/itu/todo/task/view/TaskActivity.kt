@@ -74,16 +74,14 @@ class TaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
-        titleEt        = findViewById(R.id.etTitle)
-        descEt         = findViewById(R.id.etDescription)
-        prioEt         = findViewById(R.id.etPriority)
-        takePicBtn     = findViewById(R.id.button_take_picture)
-        addBtn         = findViewById(R.id.button_add_task)
-        imageView      = findViewById(R.id.imageViewTask)
-        spinner        = findViewById(R.id.spinner_choose_location)
+        titleEt = findViewById(R.id.etTitle)
+        descEt = findViewById(R.id.etDescription)
+        prioEt = findViewById(R.id.etPriority)
+        takePicBtn = findViewById(R.id.button_take_picture)
+        addBtn = findViewById(R.id.button_add_task)
+        imageView = findViewById(R.id.imageViewTask)
+        spinner = findViewById(R.id.spinner_choose_location)
         addLocationBtn = findViewById(R.id.button_add_location)
-
-
 
         existingTaskId = intent.getLongExtra(EXTRA_TASK_ID, -1L)
             .takeIf { it != -1L }

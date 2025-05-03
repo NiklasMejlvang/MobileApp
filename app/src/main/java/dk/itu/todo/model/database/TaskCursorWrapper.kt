@@ -15,6 +15,8 @@ class TaskCursorWrapper(cursor: Cursor?) : CursorWrapper(cursor) {
             val isCompleted = getInt(getColumnIndex(TaskTable.Cols.IS_COMPLETED)) != 0
             val imagePath = getString(getColumnIndex(TaskTable.Cols.IMAGE_PATH))
             val location = getString(getColumnIndexOrThrow(TaskTable.Cols.LOCATION))
-            return Task(id, title, description, priority, isCompleted, imagePath, location)
+            val latitude = getDouble(getColumnIndexOrThrow(TaskTable.Cols.LATITUDE))
+            val longitude = getDouble(getColumnIndexOrThrow(TaskTable.Cols.LONGITUDE))
+            return Task(id, title, description, priority, isCompleted, imagePath, location, latitude, longitude)
         }
 }
