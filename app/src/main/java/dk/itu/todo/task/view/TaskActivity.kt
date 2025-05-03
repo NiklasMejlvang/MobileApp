@@ -98,6 +98,7 @@ class TaskActivity : AppCompatActivity() {
             prioEt.setText(task.priority.toString())
             task.imagePath?.let { imageView.setImageURI(Uri.fromFile(File(it))) }
             addBtn.text = "Save Changes"
+            imagePath = task.imagePath
         }
 
         viewModel = ViewModelProvider(this)[TaskViewModel::class.java]
