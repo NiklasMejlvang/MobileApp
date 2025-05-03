@@ -16,7 +16,7 @@ class DBCreate(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, nul
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             "CREATE TABLE " + TaskTable.NAME + "(" +
-                    TaskTable.Cols.ID + "INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    TaskTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TaskTable.Cols.TITLE + " TEXT NOT NULL, " +
                     TaskTable.Cols.DESCRIPTION + " TEXT NOT NULL, " +
                     TaskTable.Cols.PRIORITY + " INTEGER NOT NULL, " +
