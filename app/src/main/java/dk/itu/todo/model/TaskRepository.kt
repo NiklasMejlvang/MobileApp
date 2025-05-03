@@ -82,7 +82,6 @@ class TaskRepository(context: Context) {
             put(Cols.IMAGE_PATH,   task.imagePath)
             put(Cols.LOCATION,     task.location)
         }
-        // Use the auto-generated ID in the WHERE clause:
         db.update(
             TaskTable.NAME,
             cv,

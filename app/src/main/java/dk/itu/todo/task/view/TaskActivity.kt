@@ -130,18 +130,18 @@ class TaskActivity : AppCompatActivity() {
 
         addBtn.setOnClickListener {
             val title = titleEt.text.toString().trim()
-            val desc  = descEt.text.toString().trim()
-            val prio  = prioEt.text.toString().toIntOrNull() ?: 0
+            val desc = descEt.text.toString().trim()
+            val prio = prioEt.text.toString().toIntOrNull() ?: 0
 
             if (existingTaskId != null) {
                 viewModel.updateTask(
-                    id          = existingTaskId!!,
-                    title       = title,
+                    id = existingTaskId!!,
+                    title = title,
                     description = desc,
-                    priority    = prio,
+                    priority = prio,
                     isCompleted = existingIsCompleted,
-                    imagePath   = imagePath,
-                    location    = selectedLocation
+                    imagePath = imagePath,
+                    location = selectedLocation
                 )
             } else {
                 viewModel.addTask(title, desc, prio, imagePath, selectedLocation)
@@ -171,9 +171,9 @@ class TaskActivity : AppCompatActivity() {
     }
 
     private fun dispatchTakePictureIntent() {
-        val fileName   = "IMG_${System.currentTimeMillis()}"
+        val fileName = "IMG_${System.currentTimeMillis()}"
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: filesDir
-        val photoFile  = File.createTempFile(fileName, ".jpg", storageDir).apply {
+        val photoFile = File.createTempFile(fileName, ".jpg", storageDir).apply {
             imagePath = absolutePath
         }
         photoUri = FileProvider.getUriForFile(
@@ -219,7 +219,6 @@ class TaskActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_LOCATION && resultCode == Activity.RESULT_OK) {
-            // refresh spinner, auto-select the new one
             setupLocationSpinner()
             spinner.setSelection(locationNames.size - 1)
         }

@@ -34,15 +34,6 @@ class DBCreate(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         )
     }
 
-    private fun addItem(db: SQLiteDatabase, what: String, where: String) {
-        db.execSQL("INSERT INTO " + TaskTable.NAME + " (" +
-                TaskTable.Cols.TITLE + ", " +
-                TaskTable.Cols.DESCRIPTION + ", " +
-                TaskTable.Cols.PRIORITY + ", " +
-                TaskTable.Cols.IS_COMPLETED + ") VALUES (?,?,?,?)",
-            arrayOf(what, where, 0, 0)
-        )
-    }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 2) {
