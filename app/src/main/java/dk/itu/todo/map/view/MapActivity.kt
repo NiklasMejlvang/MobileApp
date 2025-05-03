@@ -45,6 +45,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapViewModel.tasks.observe(this) { tasks ->
             displayTasksOnMap(tasks)
         }
+
+        mapViewModel.loadTasks()
     }
 
     private fun displayTasksOnMap(tasks: List<Task>) {
