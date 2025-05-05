@@ -35,7 +35,6 @@ import java.io.File
 class TaskActivity : AppCompatActivity() {
 
     companion object {
-        // NEW: key for passing in the task to edit
         const val EXTRA_TASK_ID = "dk.itu.todo.task.TASK_ID"
     }
 
@@ -212,8 +211,6 @@ class TaskActivity : AppCompatActivity() {
                 }
             }
     }
-
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
