@@ -68,7 +68,7 @@
         android:id="@+id/etPriority"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Enter priority (number)"
+        android:hint="Enter priority (number 1-5)"
         android:inputType="number"
         app:layout_constraintTop_toBottomOf="@id/tvPriority"
         app:layout_constraintStart_toStartOf="@id/tvPriority"
