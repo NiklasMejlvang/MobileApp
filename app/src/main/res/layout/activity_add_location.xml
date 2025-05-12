@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!--New XML file for navigation -->
-
     <EditText
         android:id="@+id/editTextLocationName"
         android:layout_width="0dp"
