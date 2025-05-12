@@ -68,7 +68,6 @@
             android:id="@+id/imageViewTaskItem"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:rotation="90"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="@+id/tv_description"
             app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"

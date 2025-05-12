@@ -1,5 +1,7 @@
 package dk.itu.todo.taskList.view
 
+import dk.itu.todo.utils.getRotatedBitmapFromUri
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -53,7 +55,9 @@ class TaskAdapter(
                 imageViewTaskItem.visibility = View.VISIBLE
 
 
-                val bmp = BitmapFactory.decodeFile(task.imagePath)
+                val context = holder.itemView.context
+                val uri = Uri.fromFile(java.io.File(task.imagePath))
+                val bmp = getRotatedBitmapFromUri(context, uri)
                 imageViewTaskItem.setImageBitmap(bmp)
 
             } else {

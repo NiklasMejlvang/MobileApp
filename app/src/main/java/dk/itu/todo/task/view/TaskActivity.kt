@@ -29,6 +29,7 @@ import dk.itu.todo.model.Location
 import dk.itu.todo.model.LocationRepository
 import dk.itu.todo.model.database.DBCreate
 import dk.itu.todo.task.viewmodel.TaskViewModel
+import dk.itu.todo.utils.getRotatedBitmapFromUri
 import java.io.File
 
 
@@ -205,7 +206,8 @@ class TaskActivity : AppCompatActivity() {
             registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
                 if (success) {
                     val uri = photoUri ?: return@registerForActivityResult
-                    imageView.setImageURI(uri)
+                    val rotatedBitmap = getRotatedBitmapFromUri(this, uri)
+                    imageView.setImageBitmap(rotatedBitmap)
                 } else {
                     Toast.makeText(this, "Picture not taken", Toast.LENGTH_SHORT).show()
                 }
